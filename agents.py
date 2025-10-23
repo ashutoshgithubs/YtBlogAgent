@@ -1,5 +1,22 @@
 from crewai import Agent
 from tools import yt_tool
+from crewai import LLM
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+os.environ["GROQ_API_KEY"] = os.getenv("GROQ_API_KEY")
+
+# llm = LLM(
+#     model="groq/llama-3.2-90b-text-preview",
+#     temperature=0.7
+# )
+
+llm = LLM(
+    model="ollama/llama3.2:1b",
+    base_url="http://localhost:11434"
+)
 
 ## Agent 1 for blog research from YouTube videos
 
@@ -14,6 +31,7 @@ blog_researcher=Agent(
     and can quickly identify key points and insights from video content across an entire channel."""
     ),
     tools=[yt_tool],
+    llm = llm,
     allow_delegation=True
 )
 
@@ -31,6 +49,5 @@ blog_writer=Agent(
     ),
     tools=[yt_tool],
     allow_delegation=False
-
 
 )
